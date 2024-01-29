@@ -2,6 +2,14 @@ import { InputType, Int, Field } from '@nestjs/graphql';
 
 @InputType()
 export class CreateTicketInput {
-  @Field(() => Int, { description: 'Example field (placeholder)' })
-  exampleField: number;
+ 
+  @Field()
+  subject: string;
+
+  @Field()
+  description: string;
+
+
+  @Field()
+  userId: number;
 }

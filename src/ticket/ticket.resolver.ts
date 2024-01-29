@@ -9,7 +9,7 @@ export class TicketResolver {
   constructor(private readonly ticketService: TicketService) {}
 
   @Mutation(() => Ticket)
-  createTicket(@Args('createTicketInput') createTicketInput: CreateTicketInput) {
+  createTicket(@Args('CreateTicketInput') createTicketInput: CreateTicketInput):Promise<Ticket> {
     return this.ticketService.create(createTicketInput);
   }
 

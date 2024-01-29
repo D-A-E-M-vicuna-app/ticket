@@ -1,7 +1,51 @@
-import { ObjectType, Field, Int } from '@nestjs/graphql';
+import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn } from 'typeorm';
+import { ObjectType, Field, ID } from '@nestjs/graphql';
+
+export enum TicketStatus {
+  OPEN = "OPEN",
+  IN_PROGRESS = "IN_PROGRESS",
+  CLOSED = "CLOSED",
+}
 
 @ObjectType()
+@Entity()
 export class Ticket {
-  @Field(() => Int, { description: 'Example field (placeholder)' })
-  exampleField: number;
+  @Field(() => ID)
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  @Field()
+  @Column()
+  subject: string;
+
+  @Field()
+  @Column()
+  description: string;
+
+  @Field()
+  @Column({
+    type: "enum",
+    enum: TicketStatus,
+    default: TicketStatus.OPEN
+  })
+  status: TicketStatus;
+
+  @Field()
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @Field({ nullable: true })
+  @Column({ type: 'timestamp', nullable: true })
+  closedAt: Date;
+
+  @Field()
+  @Column()
+  userId: number;
+
+  @Field({ nullable: true })
+  @Column({ nullable: true })
+  assignedToId: number;
+
+
+
 }
