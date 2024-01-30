@@ -3,6 +3,7 @@ import { TicketService } from './ticket.service';
 import { Ticket } from './entities/ticket.entity';
 import { CreateTicketInput } from './dto/create-ticket.input';
 import { UpdateTicketInput } from './dto/update-ticket.input';
+import { DeleteTicketResponse } from './responses/delete-ticket.response';
 
 @Resolver(() => Ticket)
 export class TicketResolver {
@@ -13,23 +14,28 @@ export class TicketResolver {
     return this.ticketService.create(createTicketInput);
   }
 
-  @Query(() => [Ticket], { name: 'ticket' })
-  findAll() {
+  @Query(() => [Ticket], { name: 'tickets' })
+  findAll(): Promise<Ticket[]> {
     return this.ticketService.findAll();
   }
 
   @Query(() => Ticket, { name: 'ticket' })
-  findOne(@Args('id', { type: () => Int }) id: number) {
+  findOne(@Args('id', { type: () => Int }) id: number): Promise<Ticket> {
     return this.ticketService.findOne(id);
   }
 
   @Mutation(() => Ticket)
-  updateTicket(@Args('updateTicketInput') updateTicketInput: UpdateTicketInput) {
-    return this.ticketService.update(updateTicketInput.id, updateTicketInput);
+  updateTicket(@Args('UpdateTicketInput') updateTicketInput: UpdateTicketInput): Promise<Ticket> {
+    return this.ticketService.updateTicket(updateTicketInput);
   }
 
-  @Mutation(() => Ticket)
-  removeTicket(@Args('id', { type: () => Int }) id: number) {
-    return this.ticketService.remove(id);
+  @Mutation(() => DeleteTicketResponse, { name: 'deleteTicket' })
+  deleteTicket(@Args('id', { type: () => Int }) id: number): Promise<DeleteTicketResponse>{
+    return this.ticketService.deleteTicket(id);
+  }
+
+  @Query(() => [Ticket], { name: 'getTicketsByUserId' })
+  getTicketsByUserId(@Args('userId', { type: () => Int }) userId: number):Promise<Ticket[]> {
+    return this.ticketService.getTicketsByUserId(userId);
   }
 }
