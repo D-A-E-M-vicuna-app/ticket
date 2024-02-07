@@ -96,6 +96,7 @@ export class TicketService {
   }
 
   async getTicketsByUserId(userId: number): Promise<Ticket[]> {
+    console.log("userId en service de tickets: ", userId);
     try {
       const tickets = await this.ticketRepository.find({ where: { userId } });
       if (!tickets.length) {
