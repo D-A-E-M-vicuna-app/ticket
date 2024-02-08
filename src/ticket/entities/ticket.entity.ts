@@ -1,5 +1,5 @@
 import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn } from 'typeorm';
-import { ObjectType, Field, ID } from '@nestjs/graphql';
+import { ObjectType, Field, ID, Int } from '@nestjs/graphql';
 
 export enum TicketStatus {
   OPEN = "OPEN",
@@ -42,7 +42,11 @@ export class Ticket {
   @Column()
   userId: number;
 
-  @Field({ nullable: true })
+  @Field()
+  @Column()
+  institutionId: number;
+
+  @Field(() => Int, { nullable: true })
   @Column({ nullable: true })
   assignedToId: number;
 

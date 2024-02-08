@@ -16,6 +16,7 @@ export class TicketService {
     private ticketRepository: Repository<Ticket>,
   ) { }
   async create(createTicketInput: CreateTicketInput): Promise<Ticket> {
+    console.log("entrando en create de ticket service");
     const userId = createTicketInput.userId;
     /*
     const client = new ApolloClient({

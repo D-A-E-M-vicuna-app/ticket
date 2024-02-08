@@ -11,6 +11,7 @@ export class TicketResolver {
 
   @Mutation(() => Ticket)
   createTicket(@Args('CreateTicketInput') createTicketInput: CreateTicketInput):Promise<Ticket> {
+    console.log("entrando en create de ticket resolver");
     return this.ticketService.create(createTicketInput);
   }
 

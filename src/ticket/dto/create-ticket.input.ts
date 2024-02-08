@@ -18,4 +18,9 @@ export class CreateTicketInput {
   @IsNotEmpty()
   @Field()
   userId: number;//obtenerlo del accessToken
+
+  @IsNotEmpty()
+  @Field(() => Int, { nullable: true })
+  institutionId: number;
+  
 }
