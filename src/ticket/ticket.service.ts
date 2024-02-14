@@ -7,6 +7,8 @@ import { Repository } from 'typeorm';
 import { ApolloClient, InMemoryCache } from '@apollo/client';
 import { request, gql } from 'graphql-request';
 import { DeleteTicketResponse } from './responses/delete-ticket.response';
+import { ChangeStatusToInProgressResponse } from './responses/change-status-to-in-progress.response';
+import { TicketStatus } from './entities/ticket.entity';
 
 @Injectable()
 export class TicketService {
@@ -107,5 +109,22 @@ export class TicketService {
     } catch (error) {
       throw new Error(`Error retrieving tickets: ${error.message}`);
     }
+  }
+
+  async changeStatusToInProgress(id: number, userId: number, assignedToId: number): Promise<ChangeStatusToInProgressResponse> {
+    const ticket = await this.ticketRepository.findOne({ where: { id } });
+    if (!ticket) {
+      return { success: false, message: 'Ticket not found' };
+    }
+    if (ticket.userId !== userId) {
+      return { success: false, message: 'You are not authorized to change the status of this ticket' };
+    }
+    if (ticket.status === TicketStatus.OPEN) {
+      ticket.status = TicketStatus.IN_PROGRESS;//cambia el estado del ticket a IN_PROGRESS
+      ticket.assignedToId = assignedToId;//asigna el tickwet al admin que lo acepta
+      await this.ticketRepository.save(ticket);
+      return { success: true, message: 'Ticket status changed to IN_PROGRESS' };
+    }
+    return { success: false, message: 'Ticket status could not be changed' };
   }
 }

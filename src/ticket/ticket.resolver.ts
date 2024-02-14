@@ -4,14 +4,17 @@ import { Ticket } from './entities/ticket.entity';
 import { CreateTicketInput } from './dto/create-ticket.input';
 import { UpdateTicketInput } from './dto/update-ticket.input';
 import { DeleteTicketResponse } from './responses/delete-ticket.response';
+import { ChangeStatusToInProgressResponse } from './responses/change-status-to-in-progress.response';
 
 @Resolver(() => Ticket)
 export class TicketResolver {
   constructor(private readonly ticketService: TicketService) {}
 
   @Mutation(() => Ticket)
-  createTicket(@Args('CreateTicketInput') createTicketInput: CreateTicketInput):Promise<Ticket> {
-    console.log("entrando en create de ticket resolver");
+  createTicket(
+    @Args('CreateTicketInput') createTicketInput: CreateTicketInput,
+  ): Promise<Ticket> {
+    console.log('entrando en create de ticket resolver');
     return this.ticketService.create(createTicketInput);
   }
 
@@ -26,17 +29,34 @@ export class TicketResolver {
   }
 
   @Mutation(() => Ticket)
-  updateTicket(@Args('UpdateTicketInput') updateTicketInput: UpdateTicketInput): Promise<Ticket> {
+  updateTicket(
+    @Args('UpdateTicketInput') updateTicketInput: UpdateTicketInput,
+  ): Promise<Ticket> {
     return this.ticketService.updateTicket(updateTicketInput);
   }
 
   @Mutation(() => DeleteTicketResponse, { name: 'deleteTicket' })
-  deleteTicket(@Args('id', { type: () => Int }) id: number): Promise<DeleteTicketResponse>{
+  deleteTicket(
+    @Args('id', { type: () => Int }) id: number,
+  ): Promise<DeleteTicketResponse> {
     return this.ticketService.deleteTicket(id);
   }
 
   @Query(() => [Ticket], { name: 'getTicketsByUserId' })
-  getTicketsByUserId(@Args('userId', { type: () => Int }) userId: number):Promise<Ticket[]> {
+  getTicketsByUserId(
+    @Args('userId', { type: () => Int }) userId: number,
+  ): Promise<Ticket[]> {
     return this.ticketService.getTicketsByUserId(userId);
+  }
+
+  @Mutation(() => ChangeStatusToInProgressResponse, {
+    name: 'changeStatusToInProgress',
+  })
+  changeStatusToInProgress(
+    @Args('id', { type: () => Int }) id: number,
+    @Args('userId', { type: () => Int }) userId: number,
+    @Args('assignedToId', { type: () => Int }) assignedToId: number,
+  ): Promise<ChangeStatusToInProgressResponse> {
+    return this.ticketService.changeStatusToInProgress(id, userId, assignedToId);
   }
 }
