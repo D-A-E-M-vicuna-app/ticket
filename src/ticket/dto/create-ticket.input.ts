@@ -4,7 +4,7 @@ import { IsNotEmpty, IsString, Length } from 'class-validator';
 @InputType()
 export class CreateTicketInput {
  
-  @Length(3, 30)
+  @Length(3, 100)
   @IsString()
   @IsNotEmpty()
   @Field()
@@ -12,7 +12,7 @@ export class CreateTicketInput {
 
   @IsString() 
   @Field()
-  @Length(3, 50)
+  @Length(3, 300)
   description?: string;
 
   @IsNotEmpty()

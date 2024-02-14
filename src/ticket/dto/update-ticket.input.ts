@@ -13,13 +13,13 @@ export class UpdateTicketInput  {
     @Field(() => String, { nullable: true })
     @IsString()
     @IsOptional()
-    @Length(3, 30)
+    @Length(3, 100)
     subject?: string;
 
     @Field(() => String, { nullable: true })
     @IsString()
     @IsOptional()
-    @Length(3, 50)
+    @Length(3, 300)
     description?: string;
 
  
