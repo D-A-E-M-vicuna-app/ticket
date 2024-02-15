@@ -112,6 +112,7 @@ export class TicketService {
   }
 
   async changeStatusToInProgress(id: number, userId: number, assignedToId: number): Promise<ChangeStatusToInProgressResponse> {
+
     const ticket = await this.ticketRepository.findOne({ where: { id } });
     if (!ticket) {
       return { success: false, message: 'Ticket not found' };
@@ -124,6 +125,25 @@ export class TicketService {
       ticket.assignedToId = assignedToId;//asigna el tickwet al admin que lo acepta
       await this.ticketRepository.save(ticket);
       return { success: true, message: 'Ticket status changed to IN_PROGRESS' };
+    }
+    return { success: false, message: 'Ticket status could not be changed' };
+  }
+
+  async changeStatusToClosed(id: number, userId: number, assignedToId: number): Promise<ChangeStatusToInProgressResponse> {
+    console.log(id, userId, assignedToId)
+    const ticket = await this.ticketRepository.findOne({ where: { id } });
+    if (!ticket) {
+      return { success: false, message: 'Ticket not found' };
+    }
+    if (ticket.userId !== userId) {
+      return { success: false, message: 'You are not authorized to change the status of this ticket' };
+    }
+    if (ticket.status === TicketStatus.IN_PROGRESS) {
+      ticket.status = TicketStatus.CLOSED;
+      ticket.assignedToId = assignedToId;
+      ticket.closedAt = new Date();
+      await this.ticketRepository.save(ticket);
+      return { success: true, message: 'Ticket status changed to CLOSED' };
     }
     return { success: false, message: 'Ticket status could not be changed' };
   }

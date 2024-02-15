@@ -5,10 +5,11 @@ import { CreateTicketInput } from './dto/create-ticket.input';
 import { UpdateTicketInput } from './dto/update-ticket.input';
 import { DeleteTicketResponse } from './responses/delete-ticket.response';
 import { ChangeStatusToInProgressResponse } from './responses/change-status-to-in-progress.response';
+import { ChangeStatusToClosedResponse } from './responses/change-status-to-closed.response';
 
 @Resolver(() => Ticket)
 export class TicketResolver {
-  constructor(private readonly ticketService: TicketService) {}
+  constructor(private readonly ticketService: TicketService) { }
 
   @Mutation(() => Ticket)
   createTicket(
@@ -30,22 +31,19 @@ export class TicketResolver {
 
   @Mutation(() => Ticket)
   updateTicket(
-    @Args('UpdateTicketInput') updateTicketInput: UpdateTicketInput,
-  ): Promise<Ticket> {
+    @Args('UpdateTicketInput') updateTicketInput: UpdateTicketInput,): Promise<Ticket> {
     return this.ticketService.updateTicket(updateTicketInput);
   }
 
   @Mutation(() => DeleteTicketResponse, { name: 'deleteTicket' })
   deleteTicket(
-    @Args('id', { type: () => Int }) id: number,
-  ): Promise<DeleteTicketResponse> {
+    @Args('id', { type: () => Int }) id: number,): Promise<DeleteTicketResponse> {
     return this.ticketService.deleteTicket(id);
   }
 
   @Query(() => [Ticket], { name: 'getTicketsByUserId' })
   getTicketsByUserId(
-    @Args('userId', { type: () => Int }) userId: number,
-  ): Promise<Ticket[]> {
+    @Args('userId', { type: () => Int }) userId: number,): Promise<Ticket[]> {
     return this.ticketService.getTicketsByUserId(userId);
   }
 
@@ -55,8 +53,18 @@ export class TicketResolver {
   changeStatusToInProgress(
     @Args('id', { type: () => Int }) id: number,
     @Args('userId', { type: () => Int }) userId: number,
-    @Args('assignedToId', { type: () => Int }) assignedToId: number,
-  ): Promise<ChangeStatusToInProgressResponse> {
+    @Args('assignedToId', { type: () => Int }) assignedToId: number,): Promise<ChangeStatusToInProgressResponse> {
     return this.ticketService.changeStatusToInProgress(id, userId, assignedToId);
+  }
+
+  @Mutation (() => ChangeStatusToClosedResponse, {
+    name: 'changeStatusToClosed',
+  })
+  changeStatusToClosed(
+    @Args('id', { type: () => Int }) id: number,
+    @Args('userId', { type: () => Int }) userId: number,
+    @Args('assignedToId', { type: () => Int }) assignedToId: number,
+  ): Promise<ChangeStatusToClosedResponse> {
+    return this.ticketService.changeStatusToClosed(id, userId, assignedToId);
   }
 }
