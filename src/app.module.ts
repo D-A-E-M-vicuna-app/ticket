@@ -4,6 +4,7 @@ import { AppService } from './app.service';
 import { TicketModule } from './ticket/ticket.module';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { PdfModule } from './pdf/pdf.module';
 
 @Module({
   imports: [
@@ -22,7 +23,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       synchronize: true
     })
     
-    ,TicketModule],
+    ,TicketModule, PdfModule],
   controllers: [AppController],
   providers: [AppService],
 })
