@@ -13,13 +13,13 @@ export class PdfResolver {
     return this.pdfService.create(createPdfInput);
   }
 
-  @Query(() => [Pdf], { name: 'pdf' })
+  @Query(() => [Pdf], { name: 'pdfs' })
   findAll() {
     return this.pdfService.findAll();
   }
 
   @Query(() => Pdf, { name: 'pdf' })
-  findOne(@Args('id', { type: () => Int }) id: number) {
+  findOne(@Args('id', { type: () => Int }) id: number): Promise<Pdf>{
     return this.pdfService.findOne(id);
   }
 

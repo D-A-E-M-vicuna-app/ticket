@@ -25,8 +25,12 @@ export class PdfService {
     return `This action returns all pdf`;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} pdf`;
+  findOne(id: number): Promise<Pdf>{
+    const pdf = this.pdfRepository.findOne({where: {id: id}});
+    if(!pdf){
+      throw new Error('No existe el pdf');
+    }
+    return pdf;
   }
 
   update(id: number, updatePdfInput: UpdatePdfInput) {
