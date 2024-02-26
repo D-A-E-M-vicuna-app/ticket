@@ -3,6 +3,8 @@ import { PdfService } from './pdf.service';
 import { Pdf } from './entities/pdf.entity';
 import { CreatePdfInput } from './dto/create-pdf.input';
 import { UpdatePdfInput } from './dto/update-pdf.input';
+import { SendPdfToUserInput } from './dto/send-pdf-to-user.input';
+import { SendPdfToUserResponse } from './responses/send-pdf-to-user.response';
 
 @Resolver(() => Pdf)
 export class PdfResolver {
@@ -31,5 +33,11 @@ export class PdfResolver {
   @Mutation(() => Pdf)
   removePdf(@Args('id', { type: () => Int }) id: number) {
     return this.pdfService.remove(id);
+  }
+
+  @Mutation(() => SendPdfToUserResponse , { name: 'sendPdfToUser' })
+  sendPdfToUser(@Args('sendPdfToUserInput') sendPdfToUserInput: SendPdfToUserInput):Promise<SendPdfToUserResponse>{
+    console.log('entrando en sendPdfToUser');
+    return this.pdfService.sendPdfToUser(sendPdfToUserInput);
   }
 }
