@@ -9,6 +9,7 @@ import { request, gql } from 'graphql-request';
 import { DeleteTicketResponse } from './responses/delete-ticket.response';
 import { ChangeStatusToInProgressResponse } from './responses/change-status-to-in-progress.response';
 import { TicketStatus } from './entities/ticket.entity';
+import { ArchiveTicketResponse } from './responses/archive-ticket.response';
 
 @Injectable()
 export class TicketService {
@@ -101,7 +102,7 @@ export class TicketService {
   async getTicketsByUserId(userId: number): Promise<Ticket[]> {
     console.log("userId en service de tickets: ", userId);
     try {
-      const tickets = await this.ticketRepository.find({ where: { userId } });
+      const tickets = await this.ticketRepository.find({ where: { userId, archived: false } });//devuelve los tickets no archivados
       if (!tickets.length) {
         throw new Error('No tickets found for this user ID');
       }
@@ -146,5 +147,32 @@ export class TicketService {
       return { success: true, message: 'Ticket status changed to CLOSED' };
     }
     return { success: false, message: 'Ticket status could not be changed' };
+  }
+
+  async archiveTicket(ticketId: number): Promise<ArchiveTicketResponse> {
+    try {
+      const ticket = await this.ticketRepository.findOne({ where: { id: ticketId } });
+      if (!ticket) {
+        return { success: false, message: 'Ticket not found' };
+      }
+      ticket.archived = true;
+      await this.ticketRepository.save(ticket);
+      return { success: true, message: 'Ticket archived successfully' };
+    }catch (error) {
+      return { success: false, message: `Error archiving ticket: ${error.message}` };
+    }
+  }
+
+  async getTicketsArchivedByUserId(userId: number): Promise<Ticket[]> {
+    console.log("userId en service de tickets: ", userId);
+    try {
+      const tickets = await this.ticketRepository.find({ where: { userId, archived: true } });//devuelve los tickets  archivados
+      if (!tickets.length) {
+        throw new Error('No tickets found for this user ID');
+      }
+      return tickets;
+    } catch (error) {
+      throw new Error(`Error retrieving tickets: ${error.message}`);
+    }
   }
 }

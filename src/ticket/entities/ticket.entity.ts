@@ -50,6 +50,10 @@ export class Ticket {
   @Column({ nullable: true })
   assignedToId: number;
 
+  @Field()
+  @Column({ default: false})
+  archived: boolean;  
+
 
 
 }

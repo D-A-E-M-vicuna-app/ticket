@@ -6,6 +6,7 @@ import { UpdateTicketInput } from './dto/update-ticket.input';
 import { DeleteTicketResponse } from './responses/delete-ticket.response';
 import { ChangeStatusToInProgressResponse } from './responses/change-status-to-in-progress.response';
 import { ChangeStatusToClosedResponse } from './responses/change-status-to-closed.response';
+import { ArchiveTicketResponse } from './responses/archive-ticket.response';
 
 @Resolver(() => Ticket)
 export class TicketResolver {
@@ -66,5 +67,16 @@ export class TicketResolver {
     @Args('assignedToId', { type: () => Int }) assignedToId: number,
   ): Promise<ChangeStatusToClosedResponse> {
     return this.ticketService.changeStatusToClosed(id, userId, assignedToId);
+  }
+
+  @Mutation ( () => ArchiveTicketResponse, {name: 'archiveTicket'})
+  archiveTicket( @Args( 'ticketId', {type:() => Int}) ticketId: number): Promise<ArchiveTicketResponse> {
+    return this.ticketService.archiveTicket(ticketId);
+  }
+
+  @Query(() => [Ticket], { name: 'getTicketsArchivedByUserId' })
+  getTicketsArchivedByUserId(
+    @Args('userId', { type: () => Int }) userId: number,): Promise<Ticket[]> {
+    return this.ticketService.getTicketsArchivedByUserId(userId);
   }
 }
