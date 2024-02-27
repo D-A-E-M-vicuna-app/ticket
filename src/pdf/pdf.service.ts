@@ -48,9 +48,9 @@ export class PdfService {
     //enviar el pdf al usuario
     const email = sendPdfToUserInput.email;
     const pdfBase64 = sendPdfToUserInput.pdfBase64;
-    console.log('email', email);
-    console.log('pdfBase64', pdfBase64);
-    console.log('enviando pdf al usuario');
+    //console.log('email', email);
+    //console.log('pdfBase64', pdfBase64);
+    //console.log('enviando pdf al usuario');
 
     //const fs = require('fs');
     const nodemailer = require('nodemailer');
