@@ -7,6 +7,7 @@ import { DeleteTicketResponse } from './responses/delete-ticket.response';
 import { ChangeStatusToInProgressResponse } from './responses/change-status-to-in-progress.response';
 import { ChangeStatusToClosedResponse } from './responses/change-status-to-closed.response';
 import { ArchiveTicketResponse } from './responses/archive-ticket.response';
+import { TicketsInput } from './dto/tickets.input';
 
 @Resolver(() => Ticket)
 export class TicketResolver {
@@ -21,8 +22,10 @@ export class TicketResolver {
   }
 
   @Query(() => [Ticket], { name: 'tickets' })
-  findAll(): Promise<Ticket[]> {
-    return this.ticketService.findAll();
+  findAll(
+    @Args('TicketsInput') ticketsInput: TicketsInput,
+  ): Promise<Ticket[]> {
+    return this.ticketService.findAll(ticketsInput);
   }
 
   @Query(() => Ticket, { name: 'ticket' })
