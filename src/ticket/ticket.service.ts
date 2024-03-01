@@ -3,7 +3,7 @@ import { CreateTicketInput } from './dto/create-ticket.input';
 import { UpdateTicketInput } from './dto/update-ticket.input';
 import { Ticket } from './entities/ticket.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, FindManyOptions } from 'typeorm';
+import { Repository, FindManyOptions, MoreThanOrEqual } from 'typeorm';
 import { ApolloClient, InMemoryCache } from '@apollo/client';
 import { request, gql } from 'graphql-request';
 import { DeleteTicketResponse } from './responses/delete-ticket.response';
@@ -75,20 +75,29 @@ export class TicketService {
  
   
 
-  async findAll({ limit, offset, status, archived }: TicketsInput): Promise<Ticket[]> {
+  async findAll({ limit, offset, status, archived, date }: TicketsInput): Promise<Ticket[]> {
     const findOptions: FindManyOptions<Ticket> = {
       skip: offset,
       take: limit,
     };
+    console.log("-------------------------------")
     console.log("valor de status: ", status)
     console.log("valor de archived: ", archived)
 
-    if (status) {
+    if (status && status !== "") {
       findOptions.where = { status: status as TicketStatus};
     }
 
-    if (archived !== undefined) { // Si archived es undefined, este bloque no se ejecutará
+    if (archived !== null) { // Si archived es undefined, este bloque no se ejecutará
       findOptions.where = { ...findOptions.where, archived };
+    }
+
+    if (date) {
+      const dateObj = new Date(date);
+      findOptions.where = { 
+        ...findOptions.where, 
+        createdAt: MoreThanOrEqual(dateObj)
+      };
     }
 
     const tickets = await this.ticketRepository.find(findOptions);

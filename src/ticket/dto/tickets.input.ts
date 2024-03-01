@@ -31,4 +31,8 @@ export class TicketsInput {
     @IsOptional()
     archived?: boolean;
 
+    @Field({ nullable: true })
+    @IsOptional()
+    date?: string;
+
 }
