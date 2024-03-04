@@ -109,6 +109,10 @@ export class TicketService {
     return tickets;
   }
 
+  async findAllTickets(): Promise<Ticket[]> {
+    return this.ticketRepository.find();
+  }
+
   findOne(id: number): Promise<Ticket> {
     return this.ticketRepository.findOne({ where: { id } });
   }

@@ -28,6 +28,11 @@ export class TicketResolver {
     return this.ticketService.findAll(ticketsInput);
   }
 
+  @Query(() => [Ticket], { name: 'testingTickets' })
+  findAllTickets(): Promise<Ticket[]> {
+    return this.ticketService.findAllTickets();
+  }
+
   @Query(() => Ticket, { name: 'ticket' })
   findOne(@Args('id', { type: () => Int }) id: number): Promise<Ticket> {
     return this.ticketService.findOne(id);
