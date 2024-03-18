@@ -14,12 +14,12 @@ import { PdfModule } from './pdf/pdf.module';
     }),
     TypeOrmModule.forRoot({
       type: 'postgres',
-      host: process.env.DB_HOST,
-      port: parseInt(process.env.DB_PORT),
-      username: process.env.DB_USER,
-      password: process.env.DB_PASS,
-      database: process.env.DB_DATABASE,
-      entities: ['dist/**/*.entity{.ts,.js}'],
+      url: process.env.DATABASE_URL,
+      database: process.env.PGDATABASE || process.env.DB_DATABASE,
+      host: process.env.PGHOST ||process.env.DB_HOST,
+      port: parseInt(process.env.PGPORT) ||parseInt(process.env.DB_PORT),
+      username: process.env.PGUSER || process.env.DB_USER,
+      password: process.env.PGPASSWORD ||process.env.DB_PASS,
       synchronize: true
     })
     
