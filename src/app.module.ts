@@ -20,6 +20,7 @@ import { PdfModule } from './pdf/pdf.module';
       port: parseInt(process.env.PGPORT) ||parseInt(process.env.DB_PORT),
       username: process.env.PGUSER || process.env.DB_USER,
       password: process.env.PGPASSWORD ||process.env.DB_PASS,
+      entities: ['dist/**/*.entity{.ts,.js}'],
       synchronize: true
     })
     
