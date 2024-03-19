@@ -53,7 +53,7 @@ export class TicketService {
         }
       }
     `;
-    const endpoint = `https://${process.env.NEXT_PUBLIC_USER_DOMAIN}` || 'http://localhost:3000/graphql';
+    const endpoint = `https://${process.env.NEXT_PUBLIC_USER_DOMAIN}/graphql` || 'http://localhost:3000/graphql';
 
     /*const { data } = await client.query({
       query: GET_USER_BY_ID,
